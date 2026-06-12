@@ -1,14 +1,14 @@
-import type { CellRendererParams } from "@1771technologies/lytenyte-pro/types";
-import type { Movie } from "../types";
+import type { Grid } from "@1771technologies/lytenyte-pro";
+import type { GridSpec } from "../types";
 
 const formatter = new Intl.NumberFormat("en-Us", {
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
 });
-export function Dollar({ grid, row, column }: CellRendererParams<Movie>) {
-  const field = grid.api.columnField(column, row) as number;
+export function Dollar({ api, row, column }: Grid.T.CellParams<GridSpec>) {
+  const field = api.columnField(column, row) as number;
 
-  const aggModel = grid.state.aggModel.get();
+  const aggModel = api.aggModel.get();
   const showSign = aggModel[column.id]?.fn !== "count";
 
   const sign = showSign ? "$" : "";

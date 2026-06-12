@@ -1,26 +1,24 @@
 import {
-  type FilterModelItem,
-  type FilterNumber,
-  type Column,
-  type FilterString,
-  type FilterCombination,
-  type FilterDate,
-} from "@1771technologies/lytenyte-pro/types";
-import {
   FilterDateInput,
   FilterNumberInput,
   FilterStringInput,
 } from "./filter-inputs";
 import type { Dispatch, SetStateAction } from "react";
-import type { Movie } from "../types";
+import type {
+  Filter,
+  FilterCombination,
+  FilterDate,
+  FilterNumber,
+  FilterString,
+  GridSpec,
+} from "../types";
 import { tw } from "../../lib/tw";
+import type { Grid } from "@1771technologies/lytenyte-pro";
 
 export interface SimpleFilterStringOrCombo {
-  readonly column: Column<Movie>;
-  readonly filter: Partial<FilterModelItem<Movie>> | null;
-  readonly setFilter: Dispatch<
-    SetStateAction<Partial<FilterModelItem<Movie>> | null>
-  >;
+  readonly column: Grid.Column<GridSpec>;
+  readonly filter: Partial<Filter> | null;
+  readonly setFilter: Dispatch<SetStateAction<Partial<Filter> | null>>;
 }
 
 export function SimpleFilterStringOrCombo({
@@ -33,10 +31,8 @@ export function SimpleFilterStringOrCombo({
     (column.type == "number"
       ? "number"
       : column.type === "date"
-      ? "date"
-      : "string");
-
-  if (filterType === "func") return null;
+        ? "date"
+        : "string");
 
   if (
     filterType === "string" ||
@@ -62,8 +58,8 @@ export function SimpleFilterStringOrCombo({
       column.type === "number"
         ? "number"
         : column.type === "date"
-        ? "date"
-        : "string";
+          ? "date"
+          : "string";
 
     return (
       <>
@@ -88,12 +84,12 @@ export function SimpleFilterStringOrCombo({
                 onChange={(e) => {
                   if (e.target.checked)
                     setFilter(
-                      (prev) => ({ ...prev, operator: "AND" } as SimpleFilter)
+                      (prev) => ({ ...prev, operator: "AND" }) as SimpleFilter,
                     );
                 }}
                 className={tw(
                   "appearance-none h-4 w-4 rounded-full border border-(--lng1771-gray-40) checked:border-(--lng1771-primary-50) checked:border-[5px] cursor-pointer select-none",
-                  "focus-visible:outline-offset-1 focus-visible:outline-(--lng1771-primary-50)"
+                  "focus-visible:outline-offset-1 focus-visible:outline-(--lng1771-primary-50)",
                 )}
               />
               And
@@ -107,12 +103,12 @@ export function SimpleFilterStringOrCombo({
                 onChange={(e) => {
                   if (e.target.checked)
                     setFilter(
-                      (prev) => ({ ...prev, operator: "OR" } as SimpleFilter)
+                      (prev) => ({ ...prev, operator: "OR" }) as SimpleFilter,
                     );
                 }}
                 className={tw(
                   "appearance-none h-4 w-4 rounded-full border border-(--lng1771-gray-40) checked:border-(--lng1771-primary-50) checked:border-[5px] cursor-pointer select-none",
-                  "focus-visible:outline-offset-1 focus-visible:outline-(--lng1771-primary-50)"
+                  "focus-visible:outline-offset-1 focus-visible:outline-(--lng1771-primary-50)",
                 )}
               />
               Or
@@ -267,12 +263,10 @@ function SimpleFilter({
                     ...prev,
                     kind: "string",
                     operator: v,
-                    options: { caseInsensitive: true },
                   }
                 : {
                     kind: "string",
                     operator: v,
-                    options: { caseInsensitive: true },
                   }
             ) as FilterString;
 

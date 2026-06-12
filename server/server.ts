@@ -1,25 +1,61 @@
 import {
-  type Filter,
   type FilterCombinator,
   getViewSlice,
-  type Movie,
   type ViewSlice,
 } from "./view-slice.ts";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import type {
   DataRequest,
-  DataRequestModel,
   DataResponse,
   DataResponseBranchItem,
   DataResponseLeafItem,
-} from "@1771technologies/lytenyte-pro/types";
+} from "@1771technologies/lytenyte-pro";
+
+interface FilterNumber {
+  readonly kind: "number";
+  readonly column: string;
+  readonly operator: string;
+  readonly value: number;
+}
+
+interface FilterString {
+  readonly kind: "string";
+  readonly column: string;
+  readonly operator: string;
+  readonly value: string;
+}
+
+interface FilterDate {
+  readonly kind: "date";
+  readonly column: string;
+  readonly operator: string;
+  readonly value: string;
+}
+
+interface FilterCombination {
+  readonly kind: "combination";
+  readonly filters: Filter[];
+  readonly operator: "AND" | "OR";
+}
+
+type Filter = FilterNumber | FilterString | FilterDate | FilterCombination;
+
+interface DataRequestModel {
+  readonly filters: Record<string, Filter>;
+  readonly groups: string[];
+  readonly aggregations: Record<string, { fn: string }>;
+  readonly sorts: {
+    readonly columnId: string;
+    readonly isDescending?: boolean;
+  }[];
+}
 
 const app = new Hono();
 
 app.post("/view-slice", async (c) => {
   const body = (await c.req.json()) as {
-    model: DataRequestModel<Movie>;
+    model: DataRequestModel;
     reqs: DataRequest[];
   };
 
@@ -30,9 +66,6 @@ app.post("/view-slice", async (c) => {
       | Filter
       | FilterCombinator
       | null {
-      // Function filters are not supported, not even sure how a function will be sent over the network
-      if (filter.kind === "func") return null;
-
       // The UI will only ever send flat combinator.
       if (filter.kind === "combination") {
         return {
@@ -80,7 +113,7 @@ app.post("/view-slice", async (c) => {
       start: x.start,
       end: x.end,
       aggregations: Object.fromEntries(
-        Object.entries(model.aggregations).map((x) => [x[0], x[1].fn])
+        Object.entries(model.aggregations).map((x) => [x[0], x[1].fn]),
       ) as Record<string, string>,
       filters: filters,
       filtersIn: {},
@@ -129,7 +162,7 @@ app.post("/view-slice", async (c) => {
               "/" +
               (data as { key: string }).key,
           };
-        }
+        },
       ),
       start: x.start,
       end: x.end,

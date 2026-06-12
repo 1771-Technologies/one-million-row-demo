@@ -19,7 +19,7 @@ export function PillManagerRow({
   return (
     <div
       className={tw(
-        "bg-(--lng1771-gray-05) border-(--lng1771-gray-20) grid grid-cols-[42px_1fr_64px] border-t md:grid-cols-[151px_1fr_118px]"
+        "bg-(--lng1771-gray-05) border-(--lng1771-gray-20) grid grid-cols-[42px_1fr_64px] border-t md:grid-cols-[151px_1fr_118px]",
       )}
     >
       <div className="text-(--lng1771-gray-80) flex min-h-[52px] items-center justify-center gap-2 text-sm md:justify-start md:pl-[30px] md:pr-3">
@@ -30,7 +30,7 @@ export function PillManagerRow({
         className={tw(
           "no-scrollbar flex max-h-[200px] w-full items-center overflow-auto focus:outline-none md:max-h-[unset]",
           "focus-visible:outline-(--lng1771-primary-50) focus-visible:outline-offset-[-1px]",
-          className
+          className,
         )}
       >
         {children}
@@ -80,7 +80,7 @@ export function GroupPills({ grid }: { grid: Grid<Movie> }) {
               itemClassName={tw(
                 "h-full flex items-center px-[6px] focus:outline-none group text-(--lng1771-gray-90) ",
                 "opacity-60 hover:opacity-80 transition-opacity cursor-pointer",
-                isActive && "opacity-100 hover:opacity-100"
+                isActive && "opacity-100 hover:opacity-100",
               )}
             >
               <div className="bg-(--lng1771-pill-group-fill) border-(--lng1771-pill-group-stroke) group-focus-visible:ring-(--lng1771-primary-50) flex h-[28px] cursor-pointer items-center text-nowrap rounded border pl-1 group-focus-visible:ring-1">

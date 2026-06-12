@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // https://github.com/scottrippey/react-use-event-hook
 /**
 MIT License
@@ -63,11 +64,11 @@ type AnyFunction = (...args: any[]) => any;
  * @throws {Error} If the callback is invoked during initial render (before mount)
  */
 export function useEvent<TCallback extends AnyFunction>(
-  callback: TCallback
+  callback: TCallback,
 ): TCallback {
   // Store the latest callback version to ensure we always have access to current props/state
   const latestRef = React.useRef<TCallback>(
-    useEvent_shouldNotBeInvokedBeforeMount as any
+    useEvent_shouldNotBeInvokedBeforeMount as any,
   );
   useInsertionEffect(() => {
     latestRef.current = callback;
@@ -95,6 +96,6 @@ export function useEvent<TCallback extends AnyFunction>(
  */
 function useEvent_shouldNotBeInvokedBeforeMount() {
   throw new Error(
-    "INVALID_USEEVENT_INVOCATION: the callback from useEvent cannot be invoked before the component has mounted."
+    "INVALID_USEEVENT_INVOCATION: the callback from useEvent cannot be invoked before the component has mounted.",
   );
 }

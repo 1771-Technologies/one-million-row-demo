@@ -20,7 +20,7 @@ const PopoverContent = forwardRef<
       {...props}
       className={tw(
         "bg-(--lng1771-gray-05) text-(--ln1771-gray-80) border-(--lng1771-gray-50) data-[state=closed]:animate-popover-out data-[state=open]:animate-popover-in origin-(--radix-popover-content-transform-origin) z-50 min-w-[240px] max-w-[98vw] rounded-xl border px-2 py-2 text-sm shadow-lg backdrop-blur-lg focus-visible:outline-none",
-        props.className
+        props.className,
       )}
     />
   </PopoverPrimitive.Portal>

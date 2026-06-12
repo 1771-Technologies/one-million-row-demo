@@ -13,7 +13,7 @@ export function ThemeToggle() {
 
         if (theme === "system") {
           const isDarkMode = window.matchMedia(
-            "(prefers-color-scheme: dark)"
+            "(prefers-color-scheme: dark)",
           ).matches;
           if (isDarkMode) finalTheme = "light";
           else finalTheme = "dark";

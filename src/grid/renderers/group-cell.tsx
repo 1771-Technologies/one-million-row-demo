@@ -1,16 +1,16 @@
-import type { CellRendererParams } from "@1771technologies/lytenyte-pro/types";
 import type { CSSProperties } from "react";
 import { tw } from "../../lib/tw";
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-} from "@1771technologies/lytenyte-pro/icons";
-import type { Movie } from "../types";
+import type { GridSpec } from "../types";
+import { ChevronDownIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import type { Grid } from "@1771technologies/lytenyte-pro";
 
-export function GroupCellRenderer({ row, grid }: CellRendererParams<Movie>) {
-  if (grid.api.rowIsLeaf(row)) return <div />;
+export function GroupCellRenderer({
+  row,
+  api,
+}: Grid.T.CellRendererParams<GridSpec>) {
+  if (api.rowIsLeaf(row) || api.rowIsAggregated(row)) return <div />;
 
-  const isExpanded = grid.api.rowGroupIsExpanded(row);
+  const isExpanded = row.expanded;
 
   return (
     <div
@@ -23,7 +23,7 @@ export function GroupCellRenderer({ row, grid }: CellRendererParams<Movie>) {
       className={tw(
         "relative flex h-full w-full items-center gap-2 overflow-hidden text-nowrap",
         row.depth > 0 &&
-          "before:border-ln-gray-30 before:absolute before:left-[var(--before-offset)] before:top-0 before:h-full before:border-r before:border-dashed"
+          "before:border-ln-gray-30 before:absolute before:left-[var(--before-offset)] before:top-0 before:h-full before:border-r before:border-dashed",
       )}
     >
       {row.loadingGroup && (
@@ -35,7 +35,7 @@ export function GroupCellRenderer({ row, grid }: CellRendererParams<Movie>) {
         <button
           className="hover:bg-ln-gray-10 w-5 cursor-pointer rounded transition-colors"
           onClick={() => {
-            grid.api.rowGroupToggle(row);
+            api.rowGroupToggle(row);
           }}
         >
           <span className="sr-only">Toggle the row group</span>

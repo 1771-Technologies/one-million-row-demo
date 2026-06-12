@@ -1,10 +1,5 @@
 import { DropdownMenu as D } from "radix-ui";
-import type {
-  FilterModelItem,
-  HeaderCellRendererParams,
-  SortModelItem,
-} from "@1771technologies/lytenyte-pro/types";
-import type { Movie } from "../types";
+import type { Filter, GridSpec, Model } from "../types";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { tw } from "../../lib/tw";
 import {
@@ -13,31 +8,27 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../components/popover";
-import { FilterIcon, TickmarkIcon } from "@1771technologies/lytenyte-pro/icons";
 import { SimpleFilterStringOrCombo } from "../simple-filter/simple-filter-string";
 import { useTwoFlowState } from "../simple-filter/use-two-flow-state";
 import {
   useMemo,
   type ComponentProps,
+  type JSX,
   type PropsWithChildren,
   type ReactNode,
 } from "react";
+import type { Grid } from "@1771technologies/lytenyte-pro";
 
-export function HeaderRenderer({
-  column,
-  grid,
-}: HeaderCellRendererParams<Movie>) {
-  const sort = grid.state.sortModel
-    .useValue()
-    .find((c) => c.columnId === column.id);
+export function HeaderRenderer({ column, api }: Grid.T.HeaderParams<GridSpec>) {
+  const sort = api.sorts.useValue().find((c) => c.columnId === column.id);
 
   const isDescending = sort?.isDescending ?? false;
 
-  const filterModel = grid.state.filterModel.useValue();
+  const filterModel = api.filters.useValue();
   const hasFilter = filterModel[column.id];
 
-  const aggModel = grid.state.aggModel.useValue();
-  const hasGroups = grid.state.rowGroupModel.useValue().length > 0;
+  const aggModel = api.aggModel.useValue();
+  const hasGroups = api.groups.useValue().length > 0;
 
   const aggFn = aggModel[column.id]?.fn;
 
@@ -47,39 +38,28 @@ export function HeaderRenderer({
         className={tw(
           "hover:bg-(--lng1771-gray-10) flex h-full w-full px-2 rounded-lg items-center text-xs transition-colors cursor-pointer gap-0.5 text-nowrap",
           (column.type === "number" || column.type === "date") &&
-            "tabular-nums flex-row-reverse"
+            "tabular-nums flex-row-reverse",
         )}
         onClick={() => {
-          const current = grid.api.sortForColumn(column.id);
+          const current = api.sorts.get().find((x) => x.columnId === column.id);
 
           if (current == null) {
-            let sort: SortModelItem<Movie>;
             const columnId = column.id;
-
-            if (column.type === "datetime") {
-              sort = {
-                columnId,
-                sort: { kind: "date", options: { includeTime: true } },
-              };
-            } else if (column.type === "number") {
-              sort = { columnId, sort: { kind: "number" } };
-            } else {
-              sort = { columnId, sort: { kind: "string" } };
-            }
-
-            grid.state.sortModel.set([sort]);
-            return;
-          }
-          if (!current.sort.isDescending) {
-            grid.state.sortModel.set([{ ...current.sort, isDescending: true }]);
+            const sort: Model["sorts"][number] = {
+              columnId,
+              isDescending: false,
+            };
+            api.sorts.set([sort]);
+          } else if (!current.isDescending) {
+            api.sorts.set([{ ...current, isDescending: true }]);
           } else {
-            grid.state.sortModel.set([]);
+            api.sorts.set([]);
           }
         }}
       >
         {column.name ?? column.id}
 
-        {aggFn && hasGroups && <AggMenu grid={grid} column={column} />}
+        {aggFn && hasGroups && <AggMenu api={api} column={column} />}
 
         <Popover>
           <PopoverTrigger
@@ -92,7 +72,7 @@ export function HeaderRenderer({
             )}
           </PopoverTrigger>
           <PopoverContent onClick={(e) => e.stopPropagation()}>
-            <PopoverFilterContent grid={grid} column={column} />
+            <PopoverFilterContent api={api} column={column} />
           </PopoverContent>
         </Popover>
 
@@ -112,17 +92,14 @@ export function HeaderRenderer({
 
 function AggMenu({
   column,
-  grid,
+  api,
   className,
-}: HeaderCellRendererParams<Movie> & { className?: string }) {
-  const base = grid.state.columnBase.useValue();
-
-  const aggs = grid.state.aggModel.useValue();
+}: Grid.T.HeaderParams<GridSpec> & { className?: string }) {
+  const aggs = api.aggModel.useValue();
   const agg = aggs[column.id];
   const aggName = typeof agg?.fn === "string" ? agg?.fn : "Fn(x)";
 
-  const options =
-    column.uiHints?.aggsAllowed ?? base.uiHints?.aggsAllowed ?? [];
+  const options = column.aggsAllowed ?? [];
 
   return (
     <D.Root>
@@ -137,7 +114,7 @@ function AggMenu({
           <D.DropdownMenuRadioGroup
             value={aggName}
             onValueChange={(c) => {
-              grid.state.aggModel.set((prev) => {
+              api.aggModel.set((prev) => {
                 return { ...prev, [column.id]: { fn: c } };
               });
             }}
@@ -155,7 +132,7 @@ function GridDropMenuContent(props: PropsWithChildren) {
   return (
     <D.Content
       className={tw(
-        "bg-(--lng1771-gray-05) border-(--lng1771-gray-30) z-50 rounded-lg border p-1"
+        "bg-(--lng1771-gray-05) border-(--lng1771-gray-30) z-50 rounded-lg border p-1",
       )}
     >
       {props.children}
@@ -182,7 +159,7 @@ const RadioItem = ({
         props.className,
         itemCls,
         "group",
-        "data-[disabled]:text-(--lng1771-gray-30)"
+        "data-[disabled]:text-(--lng1771-gray-30)",
       )}
     >
       {icon && <MenuIcon>{icon}</MenuIcon>}
@@ -204,11 +181,8 @@ const MenuIcon = (props: PropsWithChildren) => {
   );
 };
 
-function PopoverFilterContent({
-  grid,
-  column,
-}: HeaderCellRendererParams<Movie>) {
-  const filterModel = grid.state.filterModel.useValue();
+function PopoverFilterContent({ api, column }: Grid.T.HeaderParams<GridSpec>) {
+  const filterModel = api.filters.useValue();
 
   const initialFilter = useMemo(() => {
     const filter = filterModel[column.id];
@@ -225,8 +199,8 @@ function PopoverFilterContent({
   }, [filterModel, column]);
 
   const [tempFilter, setTempFilter] = useTwoFlowState<Partial<
-    Partial<FilterModelItem<Movie>>
-  > | null>((initialFilter as FilterModelItem<Movie>) ?? null);
+    Partial<Filter>
+  > | null>((initialFilter as Filter) ?? null);
 
   return (
     <div className="flex flex-col gap-2">
@@ -238,14 +212,14 @@ function PopoverFilterContent({
       <div className="flex justify-end gap-2 py-2">
         <PopoverClose
           onClick={() => {
-            grid.state.filterInModel.set((prev) => {
+            api.filters.set((prev) => {
               const next = { ...prev };
               delete next[column.id];
 
               return next;
             });
 
-            grid.state.filterModel.set((prev) => {
+            api.filters.set((prev) => {
               const next = { ...prev };
               delete next[column.id];
 
@@ -253,7 +227,7 @@ function PopoverFilterContent({
             });
           }}
           className={tw(
-            "text-sm border border-(--lng1771-gray-30) px-3 rounded py-0.5 hover:bg-(--lng1771-gray-10) bg-(--lng1771-gray-00) text-(--lng1771-gray-70) cursor-pointer transition-colors"
+            "text-sm border border-(--lng1771-gray-30) px-3 rounded py-0.5 hover:bg-(--lng1771-gray-10) bg-(--lng1771-gray-00) text-(--lng1771-gray-70) cursor-pointer transition-colors",
           )}
         >
           Clear
@@ -298,7 +272,7 @@ function PopoverFilterContent({
               }
 
               if (validFilter) {
-                grid.state.filterModel.set((prev) => {
+                api.filters.set((prev) => {
                   return {
                     ...prev,
                     [column.id]: validFilter,
@@ -309,12 +283,54 @@ function PopoverFilterContent({
           }}
           style={{ transform: "scale(0.92)" }}
           className={tw(
-            "text-sm  border border-(--lng1771-primary-30) px-3 rounded py-0.5 hover:bg-(--lng1771-primary-70) bg-(--lng1771-primary-50) text-(--lng1771-gray-02) font-semibold cursor-pointer transition-colors"
+            "text-sm  border border-(--lng1771-primary-30) px-3 rounded py-0.5 hover:bg-(--lng1771-primary-70) bg-(--lng1771-primary-50) text-(--lng1771-gray-02) font-semibold cursor-pointer transition-colors",
           )}
         >
           Apply
         </PopoverClose>
       </div>
     </div>
+  );
+}
+
+function TickmarkIcon(props: JSX.IntrinsicElements["svg"]) {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M3 10.5588L7.64 15.5L17.5 5"
+        stroke="#161616"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function FilterIcon(props: JSX.IntrinsicElements["svg"]) {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M17.212 3.75H2.90761C2.69022 3.75 2.5 3.92744 2.5 4.13022V5.8032C2.5 5.95529 2.55435 6.13273 2.66304 6.25947L7.63587 12.3684C7.77174 12.5205 7.85326 12.7233 7.85326 12.926V17.4634C7.85326 17.6155 8.0163 17.7168 8.15217 17.6408L11.5489 16.4241C11.9022 16.272 12.1196 15.9678 12.1196 15.613V12.926C12.1196 12.7233 12.2011 12.5205 12.337 12.3684L17.337 6.25947C17.4457 6.13273 17.5 5.98064 17.5 5.8032V3.75"
+        stroke="#161616"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

@@ -11,7 +11,7 @@ export function GridInput(props: JSX.IntrinsicElements["input"]) {
         "focus-visible:shadow-[0_1.5px_2px_0px_var(--lng1771-primary-50),0_0_0_1px_var(--lng1771-primary-50)] focus-visible:outline-none",
         "data-[disabled]:shadow-[0_1.5px_2px_0px_var(--lng1771-gray-20),0_0_0_1px_var(--lng1771-gray-20)] data-[placeholder]:data-[disabled]:text-(--lng1771-gray-50)",
         "disabled:shadow-[0_1.5px_2px_0px_var(--lng1771-gray-20),0_0_0_1px_var(--lng1771-gray-20)] disabled:text-(--lng1771-gray-50)",
-        props.className
+        props.className,
       )}
     />
   );

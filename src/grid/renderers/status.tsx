@@ -1,11 +1,11 @@
-import type { CellRendererParams } from "@1771technologies/lytenyte-pro/types";
-import type { Movie } from "../types";
+import type { GridSpec } from "../types";
 import { tw } from "../../lib/tw";
+import type { Grid } from "@1771technologies/lytenyte-pro";
 
-export function Status({ grid, row, column }: CellRendererParams<Movie>) {
-  const value = grid.api.columnField(column, row) as string;
+export function Status({ api, row, column }: Grid.T.CellParams<GridSpec>) {
+  const value = api.columnField(column, row) as string;
 
-  if (grid.api.rowIsGroup(row)) {
+  if (api.rowIsGroup(row)) {
     return "-";
   }
 
@@ -20,7 +20,7 @@ export function Status({ grid, row, column }: CellRendererParams<Movie>) {
           value === "In Production" && "bg-blue-300 text-black",
           value === "Post Production" && "bg-blue-500 text-black",
           (value == "Canceled" || value === "Rumored") &&
-            "bg-amber-200 text-black border border-amber-500"
+            "bg-amber-200 text-black border border-amber-500",
         )}
       >
         {value}

@@ -1,13 +1,12 @@
-import type {
-  DataRequest,
-  DataRequestModel,
-  DataResponse,
-  DataResponsePinned,
-} from "@1771technologies/lytenyte-pro/types";
-import type { Movie } from "./types";
+import {
+  type DataRequest,
+  type DataResponse,
+  type DataResponsePinned,
+} from "@1771technologies/lytenyte-pro";
+import type { Model } from "./types";
 
 export async function fetchSlice(req: {
-  model: DataRequestModel<Movie>;
+  model: Model;
   reqs: DataRequest[];
 }): Promise<(DataResponse | DataResponsePinned)[]> {
   return await fetch("/api/view-slice", {

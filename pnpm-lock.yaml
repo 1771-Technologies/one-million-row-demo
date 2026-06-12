@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@1771technologies/lytenyte-pro':
-        specifier: 1.0.17
-        version: 1.0.17(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 2.1.3
+        version: 2.1.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@hono/node-server':
         specifier: ^1.14.4
         version: 1.14.4(hono@4.8.3)
@@ -74,9 +74,6 @@ importers:
       tsx:
         specifier: ^4.20.6
         version: 4.20.6
-      use-debounce:
-        specifier: ^10.0.6
-        version: 10.0.6(react@19.1.0)
       zod:
         specifier: ^4.1.12
         version: 4.1.12
@@ -120,20 +117,29 @@ importers:
 
 packages:
 
-  '@1771technologies/lytenyte-core@1.0.17':
-    resolution: {integrity: sha512-9/etEZ1Oar2IxmIdfo4EcVWSMXM9H48ojqg+TGYmQiyJv3+fw+sPrUZBNG+AIw/PjkJwSmUNV1QttydjaaG2Mg==}
-    peerDependencies:
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
+  '@1771technologies/dom-utils@2.1.3':
+    resolution: {integrity: sha512-4tGFmWwQYdLRzV4mI2Fi3baGJGMWQ/Th67I4DUL5zwZ/mRB0E/Duf0NpCvKFaLcYJl3EuRIf7p4qetNRulUS3A==}
 
-  '@1771technologies/lytenyte-pro@1.0.17':
-    resolution: {integrity: sha512-0g3sPHG24JnDgz1NZNNW9djkHFc16DFCs2SFTRyreYUIQWWyW1RAq76vJxS/vjYzOG5BIfq0Swmm4ATaF+ySkg==}
-    peerDependencies:
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
+  '@1771technologies/js-utils@2.1.3':
+    resolution: {integrity: sha512-UquVQ4P1nggQhwtaf9+TTesNSSOh4Es0LvqDrY8g0CtnvvBhiqWOIj8wGZY8QsHGYeIAH+8GIL2PMnC+44v5Kg==}
 
-  '@1771technologies/lytenyte-shared@1.0.17':
-    resolution: {integrity: sha512-A0WEv6it+80WuS4P1jKksqRExXTkU+uoiMzi+/Qz6hVl2gGcoYmjBC3O7hrFIzRwqWItvoQ24HRHWb2rCeljkw==}
+  '@1771technologies/lytenyte-core@2.1.3':
+    resolution: {integrity: sha512-O/YyaFFM3hzDtMqh0ppyxsqmyukSn0CRqz8ZCBrj5pVAqw8kNAgJXS1qDt+3vyEAMQbeCVfxZKaHlNwWtexc9w==}
+    peerDependencies:
+      react: 18.0.0 || ^19.0.0
+      react-dom: 18.0.0 || ^19.0.0
+
+  '@1771technologies/lytenyte-design@2.1.3':
+    resolution: {integrity: sha512-bcoSaulJxHWT/8OZNFol0EJCRpTudpFwZJ1gIo+lvezczekH043FkVK+R87GQnEKoLQUuDRIhaSA6DhooaXq7A==}
+
+  '@1771technologies/lytenyte-pro@2.1.3':
+    resolution: {integrity: sha512-RA44Pv9CjmlrWk6Zf+b3e59nBlleHKl9DIrUxil8BEDI0wLOHSfyGJgVyeHmAR0zdeuw4ca8w/52pgpARMIXZg==}
+    peerDependencies:
+      react: 18.0.0 || ^19.0.0
+      react-dom: 18.0.0 || ^19.0.0
+
+  '@1771technologies/lytenyte-shared@2.1.3':
+    resolution: {integrity: sha512-M0PbIpA4zwnxYiOKH02m1zvB+9WIoCxhzzyqTkL0eAVdGezEi0qmDqqLk+tqXRrOZPWZgrjWxTMHpBUFqlWJmw==}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -1228,56 +1234,67 @@ packages:
     resolution: {integrity: sha512-n0edDmSHlXFhrlmTK7XBuwKlG5MbS7yleS1cQ9nn4kIeW+dJH+ExqNgQ0RrFRew8Y+0V/x6C5IjsHrJmiHtkxQ==}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.44.1':
     resolution: {integrity: sha512-8WVUPy3FtAsKSpyk21kV52HCxB+me6YkbkFHATzC2Yd3yuqHwy2lbFL4alJOLXKljoRw08Zk8/xEj89cLQ/4Nw==}
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.44.1':
     resolution: {integrity: sha512-yuktAOaeOgorWDeFJggjuCkMGeITfqvPgkIXhDqsfKX8J3jGyxdDZgBV/2kj/2DyPaLiX6bPdjJDTu9RB8lUPQ==}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.44.1':
     resolution: {integrity: sha512-W+GBM4ifET1Plw8pdVaecwUgxmiH23CfAUj32u8knq0JPFyK4weRy6H7ooxYFD19YxBulL0Ktsflg5XS7+7u9g==}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-loongarch64-gnu@4.44.1':
     resolution: {integrity: sha512-1zqnUEMWp9WrGVuVak6jWTl4fEtrVKfZY7CvcBmUUpxAJ7WcSowPSAWIKa/0o5mBL/Ij50SIf9tuirGx63Ovew==}
     cpu: [loong64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.44.1':
     resolution: {integrity: sha512-Rl3JKaRu0LHIx7ExBAAnf0JcOQetQffaw34T8vLlg9b1IhzcBgaIdnvEbbsZq9uZp3uAH+JkHd20Nwn0h9zPjA==}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.44.1':
     resolution: {integrity: sha512-j5akelU3snyL6K3N/iX7otLBIl347fGwmd95U5gS/7z6T4ftK288jKq3A5lcFKcx7wwzb5rgNvAg3ZbV4BqUSw==}
     cpu: [riscv64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-musl@4.44.1':
     resolution: {integrity: sha512-ppn5llVGgrZw7yxbIm8TTvtj1EoPgYUAbfw0uDjIOzzoqlZlZrLJ/KuiE7uf5EpTpCTrNt1EdtzF0naMm0wGYg==}
     cpu: [riscv64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-s390x-gnu@4.44.1':
     resolution: {integrity: sha512-Hu6hEdix0oxtUma99jSP7xbvjkUM/ycke/AQQ4EC5g7jNRLLIwjcNwaUy95ZKBJJwg1ZowsclNnjYqzN4zwkAw==}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.44.1':
     resolution: {integrity: sha512-EtnsrmZGomz9WxK1bR5079zee3+7a+AdFlghyd6VbAjgRJDbTANJ9dcPIPAi76uG05micpEL+gPGmAKYTschQw==}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.44.1':
     resolution: {integrity: sha512-iAS4p+J1az6Usn0f8xhgL4PaU878KEtutP4hqw52I4IO6AGoyOkHCxcc4bqufv1tQLdDWFx8lR9YlwxKuv3/3g==}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.44.1':
     resolution: {integrity: sha512-NtSJVKcXwcqozOl+FwI41OH3OApDyLk3kqTJgx8+gp6On9ZEt5mYhIsKNPGuaZr3p9T6NWPKGU/03Vw4CNU9qg==}
@@ -1332,24 +1349,28 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@tailwindcss/oxide-linux-arm64-musl@4.1.11':
     resolution: {integrity: sha512-m/NVRFNGlEHJrNVk3O6I9ggVuNjXHIPoD6bqay/pubtYC9QIdAMpS+cswZQPBLvVvEF6GtSNONbDkZrjWZXYNQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@tailwindcss/oxide-linux-x64-gnu@4.1.11':
     resolution: {integrity: sha512-YW6sblI7xukSD2TdbbaeQVDysIm/UPJtObHJHKxDEcW2exAtY47j52f8jZXkqE1krdnkhCMGqP3dbniu1Te2Fg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@tailwindcss/oxide-linux-x64-musl@4.1.11':
     resolution: {integrity: sha512-e3C/RRhGunWYNC3aSF7exsQkdXzQ/M+aYuZHKnw4U7KQwTJotnWsGOIVih0s2qQzmEzOFIJ3+xt7iq67K/p56Q==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@tailwindcss/oxide-wasm32-wasi@4.1.11':
     resolution: {integrity: sha512-Xo1+/GU0JEN/C/dvcammKHzeM6NqKovG+6921MR6oadee5XPBaKOumrJCXvopJ/Qb5TH7LX/UAywbqrP4lax0g==}
@@ -2324,24 +2345,28 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   lightningcss-linux-arm64-musl@1.30.1:
     resolution: {integrity: sha512-jmUQVx4331m6LIX+0wUhBbmMX7TCfjF5FoOH6SD1CttzuYlGNVpA7QnrmLxrsub43ClTINfGSYyHe2HWeLl5CQ==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   lightningcss-linux-x64-gnu@1.30.1:
     resolution: {integrity: sha512-piWx3z4wN8J8z3+O5kO74+yr6ze/dKmPnI7vLqfSqI8bccaTGY5xiSGVIJBDd5K5BHlvVLpUB3S2YCfelyJ1bw==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   lightningcss-linux-x64-musl@1.30.1:
     resolution: {integrity: sha512-rRomAK7eIkL+tHY0YPxbc5Dra2gXlI63HL+v1Pdi1a3sC+tJTcFrHX+E86sulgAXeI7rSzDYhPSeHHjqFhqfeQ==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   lightningcss-win32-arm64-msvc@1.30.1:
     resolution: {integrity: sha512-mSL4rqPi4iXq5YVqzSsJgMVFENoa4nGTT/GjO2c0Yl9OuQfPsIfncvLrEW6RbbB24WtZ3xP/2CCmI3tNkNV4oA==}
@@ -3072,12 +3097,6 @@ packages:
       '@types/react':
         optional: true
 
-  use-debounce@10.0.6:
-    resolution: {integrity: sha512-C5OtPyhAZgVoteO9heXMTdW7v/IbFI+8bSVKYCJrSmiWWCLsbUxiBSp4t9v0hNBTGY97bT72ydDIDyGSFWfwXg==}
-    engines: {node: '>= 16.0.0'}
-    peerDependencies:
-      react: '*'
-
   use-sidecar@1.1.3:
     resolution: {integrity: sha512-Fedw0aZvkhynoPYlA5WXrMCAMm+nSWdZt6lzJQ7Ok8S6Q+VsHmHpRWndVRJ8Be0ZbkfPc5LRYH+5XrzXcEeLRQ==}
     engines: {node: '>=10'}
@@ -3193,20 +3212,37 @@ packages:
 
 snapshots:
 
-  '@1771technologies/lytenyte-core@1.0.17(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@1771technologies/dom-utils@2.1.3':
     dependencies:
-      '@1771technologies/lytenyte-shared': 1.0.17
+      '@1771technologies/js-utils': 2.1.3
+
+  '@1771technologies/js-utils@2.1.3': {}
+
+  '@1771technologies/lytenyte-core@2.1.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@1771technologies/dom-utils': 2.1.3
+      '@1771technologies/js-utils': 2.1.3
+      '@1771technologies/lytenyte-design': 2.1.3
+      '@1771technologies/lytenyte-shared': 2.1.3
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@1771technologies/lytenyte-pro@1.0.17(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@1771technologies/lytenyte-design@2.1.3': {}
+
+  '@1771technologies/lytenyte-pro@2.1.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@1771technologies/lytenyte-core': 1.0.17(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@1771technologies/lytenyte-shared': 1.0.17
+      '@1771technologies/dom-utils': 2.1.3
+      '@1771technologies/js-utils': 2.1.3
+      '@1771technologies/lytenyte-core': 2.1.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@1771technologies/lytenyte-design': 2.1.3
+      '@1771technologies/lytenyte-shared': 2.1.3
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@1771technologies/lytenyte-shared@1.0.17': {}
+  '@1771technologies/lytenyte-shared@2.1.3':
+    dependencies:
+      '@1771technologies/dom-utils': 2.1.3
+      '@1771technologies/js-utils': 2.1.3
 
   '@ampproject/remapping@2.3.0':
     dependencies:
@@ -6431,10 +6467,6 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.1.8
-
-  use-debounce@10.0.6(react@19.1.0):
-    dependencies:
-      react: 19.1.0
 
   use-sidecar@1.1.3(@types/react@19.1.8)(react@19.1.0):
     dependencies:

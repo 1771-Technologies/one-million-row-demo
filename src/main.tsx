@@ -22,7 +22,7 @@ if (theme === "system") {
 }
 
 if (finalTheme === "light") document.body.classList.add("light");
-else document.body.classList.add("lng1771-teal");
+else document.body.classList.add("ln-teal");
 
 const client = new QueryClient();
 
@@ -45,5 +45,5 @@ createRoot(document.getElementById("root")!).render(
         </div>
       </StrictMode>
     </ThemeProvider>
-  </QueryClientProvider>
+  </QueryClientProvider>,
 );

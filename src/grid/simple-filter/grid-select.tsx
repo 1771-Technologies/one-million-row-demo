@@ -1,5 +1,8 @@
-import { ChevronDownIcon } from "@1771technologies/lytenyte-pro/icons";
-import { CheckIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@radix-ui/react-icons";
 import { Select } from "radix-ui";
 import {
   type CSSProperties,
@@ -73,7 +76,7 @@ export function GridSelect(p: GridSelectProps) {
           "data-[disabled]:shadow-[0_1.5px_2px_0px_var(--lng1771-gray-20),0_0_0_1px_var(--lng1771-gray-20)] data-[placeholder]:data-[disabled]:text-(--lng1771-gray-50)",
           "focus-visible:shadow-[0_1.5px_2px_0px_var(--lng1771-primary-50),0_0_0_1px_var(--lng1771-primary-50)]",
           "text-nowrap whitespace-nowrap text-ellipsis overflow-hidden",
-          p.className
+          p.className,
         )}
         style={p.style}
       >
@@ -120,7 +123,7 @@ const SelectItem = forwardRef(
           "data-[disabled]:pointer-events-none data-[disabled]:text-(--lng1771-gray-60)",
           "data-[highlighted]:text-(--lng1771-gray-90) data-[highlighted]:outline-none data-[highlighted]:bg-(--lng1771-gray-20) rounded-lg",
           "relative flex select-none items-center leading-none cursor-pointer",
-          className
+          className,
         )}
         {...props}
         ref={forwardedRef as Ref<HTMLDivElement>}
@@ -131,7 +134,7 @@ const SelectItem = forwardRef(
         </Select.ItemIndicator>
       </Select.Item>
     );
-  }
+  },
 );
 
 SelectItem.displayName = "SelectITem";

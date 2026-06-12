@@ -1,5 +1,4 @@
-import type { Column } from "@1771technologies/lytenyte-pro/types";
-import type { Movie } from "./types";
+import type { GridSpec } from "./types";
 import { Status } from "./renderers/status";
 import { VoteAverage } from "./renderers/vote-average";
 import { ReleaseDate } from "./renderers/release-date";
@@ -8,8 +7,9 @@ import { Runtime } from "./renderers/runtime";
 import { OriginalLanguage } from "./renderers/flags";
 import { Overview } from "./renderers/overview";
 import { Popularity } from "./renderers/popularity";
+import type { Grid } from "@1771technologies/lytenyte-pro";
 
-export const columns: Column<Movie>[] = [
+export const columns: Grid.Column<GridSpec>[] = [
   { id: "title", name: "Title", width: 400 },
   {
     id: "vote_average",
@@ -18,11 +18,9 @@ export const columns: Column<Movie>[] = [
     cellRenderer: VoteAverage,
     width: 180,
     widthMin: 180,
-    uiHints: {
-      resizable: true,
-      movable: true,
-      aggsAllowed: ["sum", "avg", "min", "max", "count"],
-    },
+    resizable: true,
+    movable: true,
+    aggsAllowed: ["sum", "avg", "min", "max", "count"],
   },
   {
     id: "status",
@@ -30,9 +28,7 @@ export const columns: Column<Movie>[] = [
     cellRenderer: Status,
     width: 140,
     widthMin: 140,
-    uiHints: {
-      rowGroupable: true,
-    },
+    rowGroupable: true,
   },
   {
     id: "release_date",
@@ -49,11 +45,9 @@ export const columns: Column<Movie>[] = [
     cellRenderer: Dollar,
     width: 160,
     widthMin: 160,
-    uiHints: {
-      resizable: true,
-      movable: true,
-      aggsAllowed: ["sum", "avg", "min", "max", "count"],
-    },
+    resizable: true,
+    movable: true,
+    aggsAllowed: ["sum", "avg", "min", "max", "count"],
   },
   {
     id: "runtime",
@@ -62,11 +56,9 @@ export const columns: Column<Movie>[] = [
     cellRenderer: Runtime,
     width: 120,
     widthMin: 120,
-    uiHints: {
-      resizable: true,
-      movable: true,
-      aggsAllowed: ["sum", "avg", "min", "max", "count"],
-    },
+    resizable: true,
+    movable: true,
+    aggsAllowed: ["sum", "avg", "min", "max", "count"],
   },
   {
     id: "budget",
@@ -75,11 +67,9 @@ export const columns: Column<Movie>[] = [
     cellRenderer: Dollar,
     width: 150,
     widthMin: 150,
-    uiHints: {
-      resizable: true,
-      movable: true,
-      aggsAllowed: ["sum", "avg", "min", "max", "count"],
-    },
+    resizable: true,
+    movable: true,
+    aggsAllowed: ["sum", "avg", "min", "max", "count"],
   },
   {
     id: "original_language",
@@ -87,11 +77,9 @@ export const columns: Column<Movie>[] = [
     cellRenderer: OriginalLanguage,
     width: 120,
     widthMin: 120,
-    uiHints: {
-      rowGroupable: true,
-      movable: true,
-      resizable: true,
-    },
+    rowGroupable: true,
+    movable: true,
+    resizable: true,
   },
   { id: "overview", name: "Synopsis", cellRenderer: Overview },
   {
@@ -101,31 +89,37 @@ export const columns: Column<Movie>[] = [
     cellRenderer: Popularity,
     width: 180,
     widthMin: 180,
-    uiHints: {
-      resizable: true,
-      movable: true,
-      aggsAllowed: ["sum", "avg", "min", "max", "count"],
-    },
+    resizable: true,
+    movable: true,
+    aggsAllowed: ["sum", "avg", "min", "max", "count"],
   },
   {
     id: "genre",
     name: "Genre",
-    uiHints: { rowGroupable: true, resizable: true, movable: true },
+    rowGroupable: true,
+    resizable: true,
+    movable: true,
   },
   {
     id: "sub_genre",
     name: "Sub Genre",
-    uiHints: { rowGroupable: true, resizable: true, movable: true },
+    rowGroupable: true,
+    resizable: true,
+    movable: true,
   },
   {
     id: "production_company",
     name: "Production Company",
     widthMin: 180,
-    uiHints: { rowGroupable: true, resizable: true, movable: true },
+    rowGroupable: true,
+    resizable: true,
+    movable: true,
   },
   {
     id: "production_country",
     name: "Country",
-    uiHints: { rowGroupable: true, resizable: true, movable: true },
+    rowGroupable: true,
+    resizable: true,
+    movable: true,
   },
 ];

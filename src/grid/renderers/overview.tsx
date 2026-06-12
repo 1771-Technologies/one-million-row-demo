@@ -1,11 +1,11 @@
-import type { CellRendererParams } from "@1771technologies/lytenyte-pro/types";
-import type { Movie } from "../types";
+import type { GridSpec } from "../types";
 import Tooltip from "../../components/tooltip";
+import type { Grid } from "@1771technologies/lytenyte-pro";
 
-export function Overview({ grid, row, column }: CellRendererParams<Movie>) {
-  const field = grid.api.columnField(column, row);
+export function Overview({ api, row, column }: Grid.T.CellParams<GridSpec>) {
+  const field = api.columnField(column, row);
 
-  if (grid.api.rowIsGroup(row)) return "-";
+  if (api.rowIsGroup(row)) return "-";
 
   if (typeof field !== "string" || !field.trim()) return "-";
 

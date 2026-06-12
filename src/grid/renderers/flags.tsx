@@ -1,5 +1,5 @@
-import type { CellRendererParams } from "@1771technologies/lytenyte-pro/types";
-import type { Movie } from "../types";
+import type { Grid } from "@1771technologies/lytenyte-pro";
+import type { GridSpec } from "../types";
 
 const languageFlags: Record<string, string> = {
   en: "🇬🇧",
@@ -182,14 +182,13 @@ const languageFlags: Record<string, string> = {
 };
 
 export function OriginalLanguage({
-  grid,
+  api,
   row,
   column,
-}: CellRendererParams<Movie>) {
-  const field = grid.api.columnField(column, row) as string;
+}: Grid.T.CellParams<GridSpec>) {
+  const field = api.columnField(column, row) as string;
 
-  // TODO
-  if (grid.api.rowIsGroup(row)) return "-";
+  if (api.rowIsGroup(row)) return "-";
 
   const flag = languageFlags[field];
   if (!flag) return "-";

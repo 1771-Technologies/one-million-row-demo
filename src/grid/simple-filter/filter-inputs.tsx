@@ -1,10 +1,3 @@
-import type {
-  FilterDate,
-  FilterNumber,
-  FilterNumberOperator,
-  FilterString,
-  FilterStringOperator,
-} from "@1771technologies/lytenyte-pro/types";
 import {
   dateOptions,
   dateValueToLabel,
@@ -16,6 +9,7 @@ import {
 import { useMemo } from "react";
 import { GridSelect } from "./grid-select";
 import { GridInput } from "./grid-input";
+import type { FilterDate, FilterNumber, FilterString } from "../types";
 
 export interface FilterInputDate {
   readonly filter: Partial<FilterDate> | null;
@@ -94,7 +88,7 @@ export function FilterStringInput({
           const isNumber = v.value.startsWith("length");
 
           if (isNumber !== operatorIsNumber) onValueChange(null);
-          onOperatorChange(v.value as FilterStringOperator);
+          onOperatorChange(v.value);
         }}
       />
       <GridInput
@@ -148,7 +142,7 @@ export function FilterNumberInput({
         options={numberOptions}
         value={operator}
         onChange={(v) => {
-          onOperatorChange(v.value as FilterNumberOperator);
+          onOperatorChange(v.value);
         }}
       />
       <GridInput

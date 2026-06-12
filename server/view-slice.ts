@@ -72,7 +72,7 @@ export function getViewSlice(view: ViewSlice) {
   const select = getSelect(
     view.groups.slice(0, view.groupKeys.length + 1),
     view.aggregations,
-    isLeaf
+    isLeaf,
   );
 
   const query = `--sql
@@ -144,7 +144,7 @@ function getGroupBy(groups: string[], groupKeys: (string | null)[]) {
 function getSelect(
   groups: string[],
   aggregations: { [column: string]: string },
-  isLeaf: boolean
+  isLeaf: boolean,
 ) {
   if (!groups.length || isLeaf) return "*";
 
@@ -242,7 +242,7 @@ function getWhere(view: ViewSlice) {
   const inFilters = Object.entries(view.filtersIn)
     .map(([column, filter]) => {
       const values = filter.values.map((x) =>
-        typeof x === "string" ? `'${x}'` : x
+        typeof x === "string" ? `'${x}'` : x,
       );
 
       return `${column} ${

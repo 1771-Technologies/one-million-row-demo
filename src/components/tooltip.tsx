@@ -3,7 +3,7 @@ import type { PropsWithChildren, ReactNode } from "react";
 import { tw } from "../lib/tw";
 
 const Tooltip = (
-  props: PropsWithChildren<{ trigger: ReactNode; className?: string }>
+  props: PropsWithChildren<{ trigger: ReactNode; className?: string }>,
 ) => {
   return (
     <T.Provider>
@@ -13,7 +13,7 @@ const Tooltip = (
           <T.Content
             className={tw(
               "p-2 text-sm select-none rounded-lg overflow-hidden border border-gray-400 bg-(--lng1771-gray-30)",
-              props.className
+              props.className,
             )}
             sideOffset={5}
           >
