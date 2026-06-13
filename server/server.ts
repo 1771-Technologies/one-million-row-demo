@@ -120,7 +120,7 @@ app.post("/view-slice", async (c) => {
       groupKeys: x.path,
       groups: model.groups as string[],
       sort: model.sorts.flatMap((x) => {
-        if (x.columnId?.startsWith("lytenyte-group-column")) {
+        if (x.columnId?.startsWith("__ln_group__")) {
           return (model.groups as string[]).map((g) => ({
             column: g,
             dir: x.isDescending ? "desc" : "asc",

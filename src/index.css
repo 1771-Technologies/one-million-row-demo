@@ -1,10 +1,6 @@
-@import "@1771technologies/lytenyte-pro/grid.css";
+@import "@1771technologies/lytenyte-pro/tw.css";
 
-@layer {
-  * {
-    outline-width: 0px;
-  }
-}
+@layer base, ln-grid, components, utilities;
 
 @import "tailwindcss";
 @theme {
@@ -306,15 +302,15 @@ body {
   transition-duration: 0s !important;
 }
 
-.lng-grid [data-ln-cell="true"] {
+.ln-grid [data-ln-cell="true"] {
   font-size: 13px;
 }
 
-.lng-grid *:focus-visible {
+.ln-grid *:focus-visible {
   outline: 1px solid var(--lng1771-primary-50);
   outline-offset: -1px;
 }
-.lng-grid [data-ln-header-cell="true"]:focus-visible {
+.ln-grid [data-ln-header-cell="true"]:focus-visible {
   outline-offset: -2px;
 }
 

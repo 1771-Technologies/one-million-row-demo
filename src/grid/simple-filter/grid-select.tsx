@@ -39,9 +39,9 @@ export function GridSelect(p: GridSelectProps) {
 
   useEffect(() => {
     if (p.skipInert) return;
-    const grid = document.getElementById("grid")!;
-    if (open) grid.inert = true;
-    else grid.inert = false;
+    // const grid = document.getElementById("grid")!;
+    // if (open) grid.inert = true;
+    // else grid.inert = false;
   }, [open]);
 
   const id = useId();
@@ -71,10 +71,10 @@ export function GridSelect(p: GridSelectProps) {
       <Select.Trigger
         disabled={p.disabled}
         className={tw(
-          "min-w-full md:min-w-[160px] flex items-center justify-between shadow-[0_1.5px_2px_0px_var(--lng1771-gray-30),0_0_0_1px_var(--lng1771-gray-30)] rounded-lg px-2 h-[28px] text-sm data-[placeholder]:text-(--lng1771-gray-70)",
-          "bg-(--lng1771-gray-00) gap-2 text-(--lng1771-gray-90)",
-          "data-[disabled]:shadow-[0_1.5px_2px_0px_var(--lng1771-gray-20),0_0_0_1px_var(--lng1771-gray-20)] data-[placeholder]:data-[disabled]:text-(--lng1771-gray-50)",
-          "focus-visible:shadow-[0_1.5px_2px_0px_var(--lng1771-primary-50),0_0_0_1px_var(--lng1771-primary-50)]",
+          "min-w-full md:min-w-[160px] flex items-center justify-between shadow-[0_1.5px_2px_0px_var(--ln-gray-30),0_0_0_1px_var(--ln-gray-30)] rounded-lg px-2 h-[28px] text-sm data-[placeholder]:text-(--ln-gray-70)",
+          "bg-(--ln-gray-00) gap-2 text-(--ln-gray-90)",
+          "data-[disabled]:shadow-[0_1.5px_2px_0px_var(--ln-gray-20),0_0_0_1px_var(--ln-gray-20)] data-[placeholder]:data-[disabled]:text-(--ln-gray-50)",
+          "focus-visible:shadow-[0_1.5px_2px_0px_var(--ln-primary-50),0_0_0_1px_var(--ln-primary-50)]",
           "text-nowrap whitespace-nowrap text-ellipsis overflow-hidden",
           p.className,
         )}
@@ -90,7 +90,7 @@ export function GridSelect(p: GridSelectProps) {
         <Select.Content
           position="popper"
           sideOffset={5}
-          className="overflow-x-hidden overflow-y-auto max-h-[300px] md:max-h-[unset] border border-(--lng1771-gray-30) bg-(--lng1771-gray-02) rounded-lg shadow-[0_14px_18px_-6px_rgba(30,30,41,0.07),0_3px_13px_0_rgba(30,30,41,0.10)] z-[100] min-w-[var(--radix-select-trigger-width)]"
+          className="overflow-x-hidden overflow-y-auto max-h-[300px] md:max-h-[unset] border border-(--ln-gray-30) bg-(--ln-gray-02) rounded-lg shadow-[0_14px_18px_-6px_rgba(30,30,41,0.07),0_3px_13px_0_rgba(30,30,41,0.10)] z-[100] min-w-[var(--radix-select-trigger-width)]"
           inert={false}
         >
           <Select.ScrollUpButton className="flex h-[25px] cursor-default items-center justify-center">
@@ -119,9 +119,9 @@ const SelectItem = forwardRef(
     return (
       <Select.Item
         className={tw(
-          "h-[32px] py-1 px-2 text-sm text-(--lng1771-gray-80)",
-          "data-[disabled]:pointer-events-none data-[disabled]:text-(--lng1771-gray-60)",
-          "data-[highlighted]:text-(--lng1771-gray-90) data-[highlighted]:outline-none data-[highlighted]:bg-(--lng1771-gray-20) rounded-lg",
+          "h-[32px] py-1 px-2 text-sm text-(--ln-gray-80)",
+          "data-[disabled]:pointer-events-none data-[disabled]:text-(--ln-gray-60)",
+          "data-[highlighted]:text-(--ln-gray-90) data-[highlighted]:outline-none data-[highlighted]:bg-(--ln-gray-20) rounded-lg",
           "relative flex select-none items-center leading-none cursor-pointer",
           className,
         )}

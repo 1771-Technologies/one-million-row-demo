@@ -28,11 +28,11 @@ export function ThemeToggle() {
           document.documentElement.classList.remove("no-transitions");
         });
 
-        document.body.classList.remove("lng1771-teal");
+        document.body.classList.remove("ln-teal");
         document.body.classList.remove("light");
 
-        if (finalTheme === "light") document.body.classList.add("light");
-        else document.body.classList.add("lng1771-teal");
+        if (finalTheme === "light") document.body.classList.add("ln-light");
+        else document.body.classList.add("ln-teal");
 
         document.documentElement.setAttribute("data-theme", finalTheme);
         document.documentElement.style.colorScheme = finalTheme;

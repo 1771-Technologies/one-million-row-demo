@@ -36,7 +36,7 @@ export function HeaderRenderer({ column, api }: Grid.T.HeaderParams<GridSpec>) {
     <div className="h-full w-full px-1 py-1">
       <div
         className={tw(
-          "hover:bg-(--lng1771-gray-10) flex h-full w-full px-2 rounded-lg items-center text-xs transition-colors cursor-pointer gap-0.5 text-nowrap",
+          "hover:bg-(--ln-gray-10) flex h-full w-full rounded-lg items-center text-xs transition-colors cursor-pointer gap-0.5 text-nowrap",
           (column.type === "number" || column.type === "date") &&
             "tabular-nums flex-row-reverse",
         )}
@@ -68,7 +68,7 @@ export function HeaderRenderer({ column, api }: Grid.T.HeaderParams<GridSpec>) {
           >
             <FilterIcon />
             {hasFilter && (
-              <div className="absolute top-0 right-0 size-1 bg-(--lng1771-primary-50) rounded-full" />
+              <div className="absolute top-0 right-0 size-1 bg-(--ln-primary-50) rounded-full" />
             )}
           </PopoverTrigger>
           <PopoverContent onClick={(e) => e.stopPropagation()}>
@@ -104,13 +104,13 @@ function AggMenu({
   return (
     <D.Root>
       <D.Trigger className={tw(className)} asChild>
-        <button className="focus-visible:ring-(--lng1771-primary-50) rounded px-1 py-1 text-xs text-[var(--lng1771-primary-50)] hover:bg-[var(--lng1771-primary-30)] focus:outline-none focus-visible:ring-1">
+        <button className="focus-visible:ring-(--ln-primary-50) rounded px-1 py-1 text-xs text-[var(--ln-primary-50)] hover:bg-[var(--ln-primary-30)] focus:outline-none focus-visible:ring-1">
           ({aggName as string})
         </button>
       </D.Trigger>
       <D.Portal>
         <GridDropMenuContent>
-          <D.Arrow fill="var(--lng1771-gray-30)" />
+          <D.Arrow fill="var(--ln-gray-30)" />
           <D.DropdownMenuRadioGroup
             value={aggName}
             onValueChange={(c) => {
@@ -132,7 +132,7 @@ function GridDropMenuContent(props: PropsWithChildren) {
   return (
     <D.Content
       className={tw(
-        "bg-(--lng1771-gray-05) border-(--lng1771-gray-30) z-50 rounded-lg border p-1",
+        "bg-(--ln-gray-05) border-(--ln-gray-30) z-50 rounded-lg border p-1",
       )}
     >
       {props.children}
@@ -140,7 +140,7 @@ function GridDropMenuContent(props: PropsWithChildren) {
   );
 }
 const itemCls =
-  "flex items-center text-sm text-(--lng1771-gray-80) cursor-pointer rounded-lg  data-[highlighted]:bg-(--lng1771-gray-30) py-1 pr-2 px-0.5";
+  "flex items-center text-sm text-(--ln-gray-80) cursor-pointer rounded-lg  data-[highlighted]:bg-(--ln-gray-30) py-1 pr-2 px-0.5";
 
 const RadioItem = ({
   icon,
@@ -159,14 +159,14 @@ const RadioItem = ({
         props.className,
         itemCls,
         "group",
-        "data-[disabled]:text-(--lng1771-gray-30)",
+        "data-[disabled]:text-(--ln-gray-30)",
       )}
     >
       {icon && <MenuIcon>{icon}</MenuIcon>}
       {props.label}
       <MenuIcon>
         <TickmarkIcon
-          className="stroke-(--lng1771-primary-50) relative hidden group-data-[state='checked']:block"
+          className="stroke-(--ln-primary-50) relative hidden group-data-[state='checked']:block"
           style={{ right: -16 }}
         />
       </MenuIcon>
@@ -175,7 +175,7 @@ const RadioItem = ({
 };
 const MenuIcon = (props: PropsWithChildren) => {
   return (
-    <span className="text-(--lng1771-gray-70) mr-2 flex h-[24px] w-[20px] items-center justify-center">
+    <span className="text-(--ln-gray-70) mr-2 flex h-[24px] w-[20px] items-center justify-center">
       {props.children}
     </span>
   );
@@ -227,7 +227,7 @@ function PopoverFilterContent({ api, column }: Grid.T.HeaderParams<GridSpec>) {
             });
           }}
           className={tw(
-            "text-sm border border-(--lng1771-gray-30) px-3 rounded py-0.5 hover:bg-(--lng1771-gray-10) bg-(--lng1771-gray-00) text-(--lng1771-gray-70) cursor-pointer transition-colors",
+            "text-sm border border-(--ln-gray-30) px-3 rounded py-0.5 hover:bg-(--ln-gray-10) bg-(--ln-gray-00) text-(--ln-gray-70) cursor-pointer transition-colors",
           )}
         >
           Clear
@@ -283,7 +283,7 @@ function PopoverFilterContent({ api, column }: Grid.T.HeaderParams<GridSpec>) {
           }}
           style={{ transform: "scale(0.92)" }}
           className={tw(
-            "text-sm  border border-(--lng1771-primary-30) px-3 rounded py-0.5 hover:bg-(--lng1771-primary-70) bg-(--lng1771-primary-50) text-(--lng1771-gray-02) font-semibold cursor-pointer transition-colors",
+            "text-sm  border border-(--ln-primary-30) px-3 rounded py-0.5 hover:bg-(--ln-primary-70) bg-(--ln-primary-50) text-(--ln-gray-02) font-semibold cursor-pointer transition-colors",
           )}
         >
           Apply
@@ -305,7 +305,7 @@ function TickmarkIcon(props: JSX.IntrinsicElements["svg"]) {
     >
       <path
         d="M3 10.5588L7.64 15.5L17.5 5"
-        stroke="#161616"
+        stroke="currentcolor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -317,8 +317,8 @@ function TickmarkIcon(props: JSX.IntrinsicElements["svg"]) {
 function FilterIcon(props: JSX.IntrinsicElements["svg"]) {
   return (
     <svg
-      width="20"
-      height="20"
+      width="16"
+      height="16"
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -326,7 +326,7 @@ function FilterIcon(props: JSX.IntrinsicElements["svg"]) {
     >
       <path
         d="M17.212 3.75H2.90761C2.69022 3.75 2.5 3.92744 2.5 4.13022V5.8032C2.5 5.95529 2.55435 6.13273 2.66304 6.25947L7.63587 12.3684C7.77174 12.5205 7.85326 12.7233 7.85326 12.926V17.4634C7.85326 17.6155 8.0163 17.7168 8.15217 17.6408L11.5489 16.4241C11.9022 16.272 12.1196 15.9678 12.1196 15.613V12.926C12.1196 12.7233 12.2011 12.5205 12.337 12.3684L17.337 6.25947C17.4457 6.13273 17.5 5.98064 17.5 5.8032V3.75"
-        stroke="#161616"
+        stroke="currentcolor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

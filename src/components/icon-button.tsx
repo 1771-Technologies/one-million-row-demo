@@ -8,7 +8,7 @@ export const IconButton = (props: JSX.IntrinsicElements["button"]) => {
       className={tw(
         "flex size-8 cursor-pointer items-center justify-center rounded transition-colors hover:bg-gray-200",
         "focus-visible:outline-brand-500/40 focus-visible:bg-gray-200 focus-visible:outline-1",
-        props.className
+        props.className,
       )}
     />
   );

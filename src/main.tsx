@@ -3,6 +3,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "next-themes";
 import { Header } from "./components/header.tsx";
+import "@1771technologies/lytenyte-pro/light-dark.css";
+import "@1771technologies/lytenyte-pro/grid-full.css";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GridLoader } from "./grid/grid-loader.tsx";

@@ -76,7 +76,7 @@ export function SimpleFilterStringOrCombo({
           typeFallback={typeFallback}
         />
         <div className="flex items-center justify-center gap-2 md:col-span-2">
-          <div className="flex gap-1 items-center justify-end text-sm text-(--lng1771-gray-80)">
+          <div className="flex gap-1 items-center justify-end text-sm text-(--ln-gray-80)">
             <label className="flex gap-2 items-center">
               <input
                 type="radio"
@@ -88,14 +88,14 @@ export function SimpleFilterStringOrCombo({
                     );
                 }}
                 className={tw(
-                  "appearance-none h-4 w-4 rounded-full border border-(--lng1771-gray-40) checked:border-(--lng1771-primary-50) checked:border-[5px] cursor-pointer select-none",
-                  "focus-visible:outline-offset-1 focus-visible:outline-(--lng1771-primary-50)",
+                  "appearance-none h-4 w-4 rounded-full border border-(--ln-gray-40) checked:border-(--ln-primary-50) checked:border-[5px] cursor-pointer select-none",
+                  "focus-visible:outline-offset-1 focus-visible:outline-(--ln-primary-50)",
                 )}
               />
               And
             </label>
           </div>
-          <div className="px-2 text-sm text-(--lng1771-gray-80)">
+          <div className="px-2 text-sm text-(--ln-gray-80)">
             <label className="flex gap-2 items-center">
               <input
                 type="radio"
@@ -107,8 +107,8 @@ export function SimpleFilterStringOrCombo({
                     );
                 }}
                 className={tw(
-                  "appearance-none h-4 w-4 rounded-full border border-(--lng1771-gray-40) checked:border-(--lng1771-primary-50) checked:border-[5px] cursor-pointer select-none",
-                  "focus-visible:outline-offset-1 focus-visible:outline-(--lng1771-primary-50)",
+                  "appearance-none h-4 w-4 rounded-full border border-(--ln-gray-40) checked:border-(--ln-primary-50) checked:border-[5px] cursor-pointer select-none",
+                  "focus-visible:outline-offset-1 focus-visible:outline-(--ln-primary-50)",
                 )}
               />
               Or

@@ -12,7 +12,7 @@ const Tooltip = (
         <T.Portal>
           <T.Content
             className={tw(
-              "p-2 text-sm select-none rounded-lg overflow-hidden border border-gray-400 bg-(--lng1771-gray-30)",
+              "p-2 text-sm select-none rounded-lg overflow-hidden border border-gray-400 bg-(--ln-gray-30)",
               props.className,
             )}
             sideOffset={5}

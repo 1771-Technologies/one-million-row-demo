@@ -10,7 +10,7 @@ export function Status({ api, row, column }: Grid.T.CellParams<GridSpec>) {
   }
 
   return (
-    <div className="flex items-center text-(--lng1771-gray-80) font-semibold tracking-wide text-xs">
+    <div className="flex items-center text-(--ln-gray-80) font-semibold tracking-wide text-xs">
       <div
         className={tw(
           "px-2 py-0.5 rounded",
