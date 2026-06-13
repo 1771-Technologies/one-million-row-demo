@@ -1,5 +1,3 @@
-import Database from "better-sqlite3";
-
 export interface Movie {
   id: string;
   title: string;
@@ -57,14 +55,60 @@ export interface ViewSlice {
   readonly filtersIn: Record<string, FilterIn>;
 }
 
-export function getViewSlice(view: ViewSlice) {
-  const db = new Database(`${import.meta.dirname}/database/movies.db`);
+export interface ViewQuery {
+  readonly query: string;
+  readonly queryCount: string;
+  readonly params: unknown[];
+  readonly limitParams: readonly [size: number, start: number];
+}
 
+// SQL identifiers (column names, function names) can't be bound as query
+// parameters, so any of these that come from the client must be checked
+// against an allow-list before being interpolated into the query string.
+const VALID_COLUMNS = new Set<string>([
+  "id",
+  "title",
+  "vote_average",
+  "vote_count",
+  "status",
+  "release_date",
+  "revenue",
+  "runtime",
+  "adult",
+  "backdrop_path",
+  "budget",
+  "homepage",
+  "imdb_id",
+  "original_language",
+  "original_title",
+  "overview",
+  "popularity",
+  "poster_path",
+  "tagline",
+  "genre",
+  "sub_genre",
+  "production_company",
+  "production_country",
+  "spoken_languages",
+  "keywords",
+]);
+
+const VALID_AGG_FNS = new Set(["sum", "avg", "min", "max", "count"]);
+
+function assertColumn(column: string) {
+  if (!VALID_COLUMNS.has(column)) throw new Error(`Unknown column: ${column}`);
+  return column;
+}
+
+function assertAggFn(fn: string) {
+  if (!VALID_AGG_FNS.has(fn)) throw new Error(`Unknown aggregation: ${fn}`);
+  return fn;
+}
+
+export function buildViewQuery(view: ViewSlice): ViewQuery {
   const size = view.end - view.start;
 
-  const limit = `LIMIT ${size} OFFSET ${view.start}`;
-
-  const where = getWhere(view);
+  const { clause: where, params } = getWhere(view);
   const groupBy = getGroupBy(view.groups, view.groupKeys);
   const orderBy = getOrderBy(view.sort, view.groups);
 
@@ -76,55 +120,54 @@ export function getViewSlice(view: ViewSlice) {
   );
 
   const query = `--sql
-    SELECT 
-        ${select} 
-    FROM 
+    SELECT
+        ${select}
+    FROM
         movies
     ${where}
     ${groupBy}
-    ${orderBy} 
-    ${limit}
+    ${orderBy}
+    LIMIT ? OFFSET ?
     `;
 
   const queryCount = groupBy
     ? `--sql
     WITH
       groupQuery AS (
-        SELECT 
+        SELECT
             count(*)
         FROM
-            movies 
+            movies
         ${where}
         ${groupBy}
       )
     SELECT count(*) as cnt FROM groupQuery
 `
     : `--sql
-    SELECT 
+    SELECT
         count(*) AS cnt
     FROM
-        movies 
+        movies
     ${where}
 `;
 
-  const promise = new Promise<{ rows: unknown[]; count: number }>((res) => {
-    const rows = db.prepare(query).all();
-    const count = (db.prepare(queryCount).get() as { cnt: number }).cnt;
-
-    res({ rows, count });
-  });
-
-  return promise;
+  return { query, queryCount, params, limitParams: [size, view.start] };
 }
 
 function getOrderBy(sorts: ViewSlice["sort"], groups: string[]) {
   if (!sorts.length) {
-    if (groups.length) return `ORDER BY ${groups.join(", ")}`;
+    if (groups.length) return `ORDER BY ${groups.map(assertColumn).join(", ")}`;
     return "ORDER BY budget DESC";
   }
 
   const sortStr = sorts
-    .map((x) => `${x.column} ${x.dir.toUpperCase()}`)
+    .map((x) => {
+      const dir = x.dir.toLowerCase();
+      if (dir !== "asc" && dir !== "desc") {
+        throw new Error(`Unknown sort direction: ${x.dir}`);
+      }
+      return `${assertColumn(x.column)} ${dir.toUpperCase()}`;
+    })
     .join(", ");
 
   return `ORDER BY ${sortStr}`;
@@ -136,7 +179,9 @@ function getGroupBy(groups: string[], groupKeys: (string | null)[]) {
   const groupColumn = groups[groupKeys.length];
 
   const groupByClause =
-    groupKeys.length >= groups.length ? "" : `GROUP BY ${groupColumn}`;
+    groupKeys.length >= groups.length
+      ? ""
+      : `GROUP BY ${assertColumn(groupColumn)}`;
 
   return groupByClause;
 }
@@ -149,26 +194,29 @@ function getSelect(
   if (!groups.length || isLeaf) return "*";
 
   const columnAgs = Object.entries(aggregations).map(([column, fn]) => {
-    return `${fn}(${column}) AS ${column}`;
+    return `${assertAggFn(fn)}(${assertColumn(column)}) AS ${column}`;
   });
 
   return [
-    `${groups.at(-1)!} AS key`,
+    `${assertColumn(groups.at(-1)!)} AS key`,
     "count(*) AS child_count",
     ...columnAgs,
   ].join(",\n\t");
 }
 
-function getWhere(view: ViewSlice) {
+function getWhere(view: ViewSlice): { clause: string; params: unknown[] } {
+  const params: unknown[] = [];
+
   // Filters for supporting groups.
   const groupByFilters: string[] = [];
   for (let i = 0; i < view.groupKeys.length; i++) {
-    const column = view.groups[i];
+    const column = assertColumn(view.groups[i]);
     const key = view.groupKeys[i];
     if (key === null) {
       groupByFilters.push(`${column} IS NULL`);
     } else {
-      groupByFilters.push(`${column} = '${key}'`);
+      groupByFilters.push(`${column} = ?`);
+      params.push(key);
     }
   }
   const groupByFilterClause = groupByFilters.join(" AND ");
@@ -176,60 +224,61 @@ function getWhere(view: ViewSlice) {
   // Normal column filters
   const handleFilter = (v: Filter | FilterCombinator): string => {
     if (v.kind !== "combination") {
-      let operator!: string;
-      let value!: string;
+      const column = assertColumn(v.column);
+
+      let operator: string | undefined;
+      let value: string | number | null = v.value;
+
       if (v.operator === "equals") {
         operator = "=";
-        value = typeof v.value === "string" ? `'${v.value}'` : String(v.value);
       }
       if (v.operator === "not_equals") {
         operator = "!=";
-        value = typeof v.value === "string" ? `'${v.value}'` : String(v.value);
       }
       if (v.operator === "begins_with") {
         operator = "LIKE";
-        value = `'${v.value}'%`;
+        value = `${v.value}%`;
       }
-      if (v.operator === "not_beings_with") {
+      if (v.operator === "not_begins_with") {
         operator = "NOT LIKE";
-        value = `'${v.value}'%`;
+        value = `${v.value}%`;
       }
       if (v.operator === "ends_with") {
         operator = "LIKE";
-        value = `'%${v.value}'`;
+        value = `%${v.value}`;
       }
       if (v.operator === "not_ends_with") {
         operator = "NOT LIKE";
-        value = `'%${v.value}'`;
+        value = `%${v.value}`;
       }
       if (v.operator === "contains") {
         operator = "LIKE";
-        value = `'%${v.value}%'`;
+        value = `%${v.value}%`;
       }
       if (v.operator === "not_contains") {
         operator = "NOT LIKE";
-        value = `'%${v.value}%'`;
+        value = `%${v.value}%`;
       }
       if (v.operator === "before" || v.operator === "less_than") {
         operator = "<";
-        value = typeof v.value === "string" ? `'${v.value}'` : String(v.value);
       }
       if (v.operator === "after" || v.operator === "greater_than") {
         operator = ">";
-        value = typeof v.value === "string" ? `'${v.value}'` : String(v.value);
       }
       if (v.operator === "less_than_or_equal") {
         operator = "<=";
-        value = typeof v.value === "string" ? `'${v.value}'` : String(v.value);
       }
       if (v.operator === "greater_than_or_equal") {
         operator = ">=";
-        value = typeof v.value === "string" ? `'${v.value}'` : String(v.value);
       }
 
-      const column = v.kind === "string" ? `LOWER(${v.column})` : v.column;
+      if (!operator) throw new Error(`Unknown filter operator: ${v.operator}`);
 
-      return `${column} ${operator} ${value.toLowerCase()}`;
+      const columnExpr = v.kind === "string" ? `LOWER(${column})` : column;
+      if (typeof value === "string") value = value.toLowerCase();
+
+      params.push(value);
+      return `${columnExpr} ${operator} ?`;
     }
 
     const filters = v.filters.map((f) => handleFilter(f));
@@ -241,13 +290,13 @@ function getWhere(view: ViewSlice) {
   // In filters
   const inFilters = Object.entries(view.filtersIn)
     .map(([column, filter]) => {
-      const values = filter.values.map((x) =>
-        typeof x === "string" ? `'${x}'` : x,
-      );
+      const col = assertColumn(column);
+      const placeholders = filter.values.map(() => "?").join(", ");
+      params.push(...filter.values);
 
-      return `${column} ${
+      return `${col} ${
         filter.operator === "IN" ? "IN" : "NOT IN"
-      } (${values.join(", ")})`;
+      } (${placeholders})`;
     })
     .join(" AND ");
 
@@ -256,7 +305,7 @@ function getWhere(view: ViewSlice) {
   if (groupByFilterClause) finalFilters.push(groupByFilterClause);
   if (inFilters) finalFilters.push(inFilters);
 
-  if (!finalFilters.length) return "";
+  if (!finalFilters.length) return { clause: "", params: [] };
 
-  return `WHERE\n\t${finalFilters.join("\n\tAND ")}`;
+  return { clause: `WHERE\n\t${finalFilters.join("\n\tAND ")}`, params };
 }

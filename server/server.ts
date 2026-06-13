@@ -1,10 +1,8 @@
-import {
-  type FilterCombinator,
-  getViewSlice,
-  type ViewSlice,
-} from "./view-slice.ts";
+import type { FilterCombinator, ViewSlice } from "./view-slice.ts";
+import { runViewSlice } from "./database/pool.ts";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { logger } from "hono/logger";
 import type {
   DataRequest,
   DataResponse,
@@ -53,7 +51,11 @@ interface DataRequestModel {
 
 const app = new Hono();
 
+app.use(logger());
+
 app.post("/view-slice", async (c) => {
+  const start = performance.now();
+
   const body = (await c.req.json()) as {
     model: DataRequestModel;
     reqs: DataRequest[];
@@ -133,7 +135,7 @@ app.post("/view-slice", async (c) => {
       }),
     };
 
-    const rows = await getViewSlice(view);
+    const rows = await runViewSlice(view);
 
     const isLeaf = x.path.length === model.groups.length;
 
@@ -171,10 +173,20 @@ app.post("/view-slice", async (c) => {
     } satisfies DataResponse;
   });
 
-  return c.json(await Promise.all(responses));
+  const results = await Promise.all(responses);
+
+  const totalRows = results.reduce((sum, r) => sum + r.data.length, 0);
+  const ms = (performance.now() - start).toFixed(1);
+  console.log(
+    `[view-slice] ${body.reqs.length} slice(s), ${totalRows} row(s), ${ms}ms`,
+  );
+
+  return c.json(results);
 });
 
+const port = 8000;
 serve({
   fetch: app.fetch,
-  port: 8000,
+  port,
 });
+console.log(`Server listening on http://localhost:${port}`);
